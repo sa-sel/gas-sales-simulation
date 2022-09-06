@@ -81,10 +81,13 @@ export const calculateBreakEven = (stealFocus = true) => {
   const kitBreakEvenRange = getRangeBelow(NamedRange.KitBreakEvenHeader);
   const nKits = kitBreakEvenRange.getNumRows();
 
+  kitBreakEvenRange.clearContent();
+
   for (let i = 0; i < nKits; i++) {
     const { kits, products, sponsorships } = fetchCurrentData();
 
     if (!kits[i].items.length || !kits[i].price) {
+      kitBreakEvenRange.getCell(i + 1, 1).setValue('-');
       continue;
     }
 
