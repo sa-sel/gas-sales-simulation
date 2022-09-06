@@ -1,19 +1,20 @@
 /** Named ranges that point to a (or many) column's header. */
 export const enum NamedRange {
-  ItemsPerKit = 'ItemsPerKitHeader',
+  ControlBreakEven = 'ControlBreakEven',
+  DashboardBreakEven = 'DashboardBreakEven',
   ItemData = 'ItemData',
+  ItemsPerKit = 'ItemsPerKit',
   ItemsUnitPrices = 'ItemsUnitPrices',
   KitBreakEvenHeader = 'KitBreakEvenHeader',
-  KitsPrices = 'KitsSellingPricesHeader',
+  KitData = 'KitData',
   Sponsorship = 'Sponsorship',
-  DashboardBreakEven = 'DashboardBreakEven',
-  ControlBreakEven = 'ControlBreakEven',
 }
 
 export const watchedRanges: NamedRange[] = [
-  NamedRange.ItemsPerKit,
+  NamedRange.ControlBreakEven,
   NamedRange.ItemData,
+  NamedRange.ItemsPerKit,
   NamedRange.ItemsUnitPrices,
-  NamedRange.KitsPrices,
+  NamedRange.KitData,
   NamedRange.Sponsorship,
 ];
