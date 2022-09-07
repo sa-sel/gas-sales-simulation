@@ -9,8 +9,15 @@ export class Product {
   fees = 0;
   shipping = 0;
 
-  constructor(public readonly id: number, private readonly unitPriceRanges: ProductPriceRange[]) {
-    this.unitPriceRanges.sort((a, b) => b.breakpoint - a.breakpoint);
+  constructor(public readonly id: string, private readonly unitPriceRanges: ProductPriceRange[]) {
+    const nRanges = this.unitPriceRanges.length;
+
+    if (nRanges) {
+      this.unitPriceRanges.sort((a, b) => b.breakpoint - a.breakpoint);
+      this.unitPriceRanges[nRanges - 1].breakpoint = 0;
+    } else {
+      this.unitPriceRanges.push({ breakpoint: 0, price: 0 });
+    }
   }
 
   get unitPrice(): number {

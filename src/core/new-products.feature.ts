@@ -1,18 +1,20 @@
-import { generateId, getRangeBelow, isSameSheet, saveNewData } from '@lib/fuctions';
+import { getRangeBelow, isSheetOneOf, saveNewData } from '@lib/fuctions';
 import { ProductModel } from '@models';
 import { NamedRange, SheetName, sheets, syncedDataSheets } from '@utils/constants';
 
 /** Save the products listed in the "new products" sheet to all synced data sheets. */
-export const saveNewProducts = () =>
+export const saveNewProducts = () => {
   saveNewData<ProductModel>({
     dataValidatorFactory: () => product => !!(product.name && product.manufacturer),
     hooks: {
-      success: () => sheets.products.getRange(1, 1).activate(),
-      afterAppend: sheet => {
-        if (isSameSheet(sheet, sheets.products) || isSameSheet(sheet, sheets.productPriceRanges)) {
-          sheet.sort(3);
-        }
-        sheet.sort(2);
+      success: () => {
+        syncedDataSheets.forEach(sheet => {
+          if (isSheetOneOf(sheet, [sheets.products, sheets.productPriceRanges])) {
+            sheet.sort(3);
+          }
+          sheet.sort(2);
+        });
+        sheets.products.getRange(1, 1).activate();
       },
     },
     invalidDataErrorMessage: `Há produtos com nome/empresa ausentes na planilha "${SheetName.NewProducts}".`,
@@ -20,20 +22,57 @@ export const saveNewProducts = () =>
     parseDataToRow: (product, sheet) => {
       let row: any[] = [product.id];
 
-      if (isSameSheet(sheet, sheets.products) || isSameSheet(sheet, sheets.newProducts)) {
-        row = row.concat([product.name, product.manufacturer, product.minOrder, product.qntIncrement, product.extraFees, product.shipping]);
-      } else if (isSameSheet(sheet, sheets.productKitMapping)) {
-        const nKits = getRangeBelow(NamedRange.KitBreakEvenHeader).getNumRows();
+      switch (sheet.getSheetId()) {
+        case sheets.newProducts.getSheetId(): {
+          row = row.concat([
+            product.name,
+            product.manufacturer,
+            product.minOrder,
+            product.qntIncrement,
+            product.extraFees,
+            product.shipping,
+          ]);
 
-        for (let i = 0; i < nKits; i++) {
-          row.push(0);
+          break;
         }
+
+        case sheets.products.getSheetId(): {
+          row = row.concat([
+            product.name,
+            product.manufacturer,
+            product.minOrder,
+            product.qntIncrement,
+            undefined,
+            product.extraFees,
+            product.shipping,
+          ]);
+
+          break;
+        }
+
+        case sheets.productKitMapping.getSheetId(): {
+          const nKits = getRangeBelow(NamedRange.KitBreakEvenHeader).getNumRows();
+
+          row.push(undefined);
+          for (let i = 0; i < nKits; i++) {
+            row.push(0);
+          }
+
+          break;
+        }
+
+        case sheets.productPriceRanges.getSheetId(): {
+          row = row.concat([undefined, 0, 0]);
+          break;
+        }
+
+        default:
       }
 
       return row;
     },
     parseRowToData: row => ({
-      id: generateId(),
+      id: Utilities.getUuid(),
       name: row[0],
       manufacturer: row[1],
       minOrder: row[2],
@@ -43,3 +82,4 @@ export const saveNewProducts = () =>
     }),
     targetSheets: syncedDataSheets,
   });
+};

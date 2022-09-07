@@ -1,5 +1,5 @@
 export type ProductModel = {
-  id: number;
+  id: string;
   name: string;
   manufacturer: string;
   minOrder: number;

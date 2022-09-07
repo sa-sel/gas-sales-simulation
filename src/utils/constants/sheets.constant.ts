@@ -23,4 +23,4 @@ export const sheets = {
 };
 
 /** Sheets that contain data for each member and must be kept synced. */
-export const syncedDataSheets = [sheets.productKitMapping, sheets.productPriceRanges, sheets.products];
+export const syncedDataSheets = [sheets.products, sheets.productKitMapping, sheets.productPriceRanges];
