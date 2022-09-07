@@ -4,12 +4,8 @@ export type ProductModel = {
   manufacturer: string;
   minOrder: number;
   qntIncrement: number;
-  unitPrice: number;
   extraFees: number;
   shipping: number;
-  soldQnt: number;
-  boughtQnt: number;
-  cost: number;
 };
 
 export type ProductPriceRange = {

@@ -56,12 +56,8 @@ const fetchCurrentData = () => {
       manufacturer: row[2],
       minOrder: row[3] || 1,
       qntIncrement: row[4] || 1,
-      unitPrice: row[5] || 0,
-      extraFees: row[6] || 0,
-      shipping: row[7] || 0,
-      soldQnt: row[8],
-      boughtQnt: row[9],
-      cost: row[10],
+      extraFees: row[5] || 0,
+      shipping: row[6] || 0,
     };
     const product = new Product(data.id, productsPriceRanges[data.id])
       .setFees(data.extraFees)
