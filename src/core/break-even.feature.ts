@@ -12,13 +12,15 @@ const balance = (kits: Kit[], products: Product[], sponsorships: number): number
 };
 
 const fetchCurrentData = () => {
-  const sponsorships: number = readDataFromSheet(sheets.sponsorships, row => row[1]).reduce((acc, cur) => acc + cur, 0);
+  const sponsorships: number = readDataFromSheet(sheets.sponsorships, { map: row => row[1] }).reduce((acc, cur) => acc + cur, 0);
 
-  const productsPriceRanges: Record<number, ProductPriceRange[]> = readDataFromSheet(sheets.productPriceRanges, row => ({
-    id: row[0],
-    breakpoint: row[2],
-    price: row[3],
-  })).reduce((acc: Record<number, ProductPriceRange[]>, cur) => {
+  const productsPriceRanges: Record<number, ProductPriceRange[]> = readDataFromSheet(sheets.productPriceRanges, {
+    map: row => ({
+      id: row[0],
+      breakpoint: row[2],
+      price: row[3],
+    }),
+  }).reduce((acc: Record<number, ProductPriceRange[]>, cur) => {
     if (!acc[cur.id]) {
       acc[cur.id] = [];
     }
@@ -27,47 +29,53 @@ const fetchCurrentData = () => {
     return acc;
   }, {});
 
-  const productsQntPerKit: Record<number, number[]> = readDataFromSheet(sheets.productKitMapping, row => ({
-    id: row[0],
-    qntPerKit: row.slice(2),
-  })).reduce((acc, cur) => ({ ...acc, [cur.id]: cur.qntPerKit }), {});
+  const productsQntPerKit: Record<number, number[]> = readDataFromSheet(sheets.productKitMapping, {
+    map: row => ({
+      id: row[0],
+      qntPerKit: row.slice(2),
+    }),
+  }).reduce((acc, cur) => ({ ...acc, [cur.id]: cur.qntPerKit }), {});
 
-  const kits: Kit[] = readDataFromSheet(sheets.kits, row => {
-    const data: KitModel = {
-      no: row[0],
-      name: row[1],
-      price: row[2] || 0,
-      quantity: row[3] || 0,
-      qntItems: row[4],
-      items: row[5],
-      cost: row[6],
-      profit: row[7],
-      income: row[8],
-      breakEvenQnt: row[9],
-    };
+  const kits: Kit[] = readDataFromSheet(sheets.kits, {
+    map: row => {
+      const data: KitModel = {
+        no: row[0],
+        name: row[1],
+        price: row[2] || 0,
+        quantity: row[3] || 0,
+        qntItems: row[4],
+        items: row[5],
+        cost: row[6],
+        profit: row[7],
+        income: row[8],
+        breakEvenQnt: row[9],
+      };
 
-    return new Kit(data.name, data.price, data.quantity);
+      return new Kit(data.name, data.price, data.quantity);
+    },
   });
 
-  const products: Product[] = readDataFromSheet(sheets.products, row => {
-    const data: ProductModel = {
-      id: row[0],
-      name: row[1],
-      manufacturer: row[2],
-      minOrder: row[3] || 1,
-      qntIncrement: row[4] || 1,
-      extraFees: row[6] || 0,
-      shipping: row[7] || 0,
-    };
-    const product = new Product(data.id, productsPriceRanges[data.id])
-      .setFees(data.extraFees)
-      .setMinOrder(data.minOrder)
-      .setShipping(data.shipping)
-      .setQntIncrement(data.qntIncrement);
+  const products: Product[] = readDataFromSheet(sheets.products, {
+    map: row => {
+      const data: ProductModel = {
+        id: row[0],
+        name: row[1],
+        manufacturer: row[2],
+        minOrder: row[3] || 1,
+        qntIncrement: row[4] || 1,
+        extraFees: row[6] || 0,
+        shipping: row[7] || 0,
+      };
+      const product = new Product(data.id, productsPriceRanges[data.id])
+        .setFees(data.extraFees)
+        .setMinOrder(data.minOrder)
+        .setShipping(data.shipping)
+        .setQntIncrement(data.qntIncrement);
 
-    productsQntPerKit[product.id].forEach((qnt: number, i: number) => kits[i].addItem(product, qnt));
+      productsQntPerKit[product.id].forEach((qnt: number, i: number) => kits[i].addItem(product, qnt));
 
-    return product;
+      return product;
+    },
   });
 
   return { kits, products, sponsorships };
