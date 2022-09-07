@@ -4,7 +4,7 @@ import { Product } from './product.class';
 export class Kit {
   private _items: KitItem[] = [];
 
-  constructor(public price: number = 0, private _quantity = 0) {}
+  constructor(public name: string, public price: number = 0, private _quantity = 0) {}
 
   get income(): number {
     return this.price * this.quantity;

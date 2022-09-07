@@ -1,4 +1,4 @@
-import { ss } from '@lib/constants';
+import { DialogTitle, ss } from '@lib/constants';
 import { getRangeBelow, readDataFromSheet } from '@lib/fuctions';
 import { KitModel, ProductModel, ProductPriceRange } from '@models';
 import { Kit, Product } from '@utils/class';
@@ -46,7 +46,7 @@ const fetchCurrentData = () => {
       breakEvenQnt: row[9],
     };
 
-    return new Kit(data.price, data.quantity);
+    return new Kit(data.name, data.price, data.quantity);
   });
 
   const products: Product[] = readDataFromSheet(sheets.products, row => {
@@ -77,7 +77,9 @@ export const calculateBreakEven = (stealFocus = true) => {
   const kitBreakEvenRange = getRangeBelow(NamedRange.KitBreakEvenHeader);
   const nKits = kitBreakEvenRange.getNumRows();
 
-  kitBreakEvenRange.clearContent();
+  kitBreakEvenRange.setValue('???');
+
+  ss.toast('As quantidades de break even estão sendo calculadas.', DialogTitle.InProgress);
 
   for (let i = 0; i < nKits; i++) {
     const { kits, products, sponsorships } = fetchCurrentData();
@@ -86,6 +88,8 @@ export const calculateBreakEven = (stealFocus = true) => {
       kitBreakEvenRange.getCell(i + 1, 1).setValue('-');
       continue;
     }
+
+    ss.toast(`Calculando quantidade de break even para o kit ${i + 1} ("${kits[i].name}").`, DialogTitle.InProgress);
 
     while (balance(kits, products, sponsorships) < 0) {
       kits[i].quantity += 1;
@@ -96,5 +100,8 @@ export const calculateBreakEven = (stealFocus = true) => {
 
   if (stealFocus) {
     ss.getRangeByName(NamedRange.DashboardBreakEven).activate();
+    ss.toast('Aqui estão quantas vendas faltam para o break even.', DialogTitle.Success);
+  } else {
+    ss.toast('As quantidades de break even foram atualizadas.', DialogTitle.Success);
   }
 };
