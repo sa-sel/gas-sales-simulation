@@ -2,19 +2,21 @@
 export const enum NamedRange {
   ControlBreakEven = 'ControlBreakEven',
   DashboardBreakEven = 'DashboardBreakEven',
-  ItemData = 'ItemData',
   ItemsPerKit = 'ItemsPerKit',
-  ItemsUnitPrices = 'ItemsUnitPrices',
   KitBreakEvenHeader = 'KitBreakEvenHeader',
   KitData = 'KitData',
+  ProductData = 'ItemData',
+  ProductsIdsHeader = 'ProductsIdsHeader',
+  ProductsUnitPrices = 'ItemsUnitPrices',
+  SelectedProductsHeader = 'SelectedProductsHeader',
   Sponsorship = 'Sponsorship',
 }
 
 export const watchedRanges: NamedRange[] = [
   NamedRange.ControlBreakEven,
-  NamedRange.ItemData,
   NamedRange.ItemsPerKit,
-  NamedRange.ItemsUnitPrices,
   NamedRange.KitData,
+  NamedRange.ProductData,
+  NamedRange.ProductsUnitPrices,
   NamedRange.Sponsorship,
 ];

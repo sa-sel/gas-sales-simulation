@@ -13,6 +13,14 @@ export class Product {
     const nRanges = this.unitPriceRanges.length;
 
     if (nRanges) {
+      /** SNIPPET: get max price for duplicated breakpoints
+      this.unitPriceRanges = Object.values(
+        this.unitPriceRanges.reduce<Record<number, ProductPriceRange>>(
+          (acc, cur) => (acc[cur.breakpoint] = { breakpoint: cur.breakpoint, price: Math.max(acc?.[cur.breakpoint].price, cur.price) }),
+          {},
+        ),
+      );
+      */
       this.unitPriceRanges.sort((a, b) => b.breakpoint - a.breakpoint);
       this.unitPriceRanges[nRanges - 1].breakpoint = 0;
     } else {

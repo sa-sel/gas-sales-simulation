@@ -1,4 +1,4 @@
-import { DialogTitle, ss } from '@lib/constants';
+import { DialogTitle, GS } from '@lib/constants';
 import { getRangeBelow, readDataFromSheet } from '@lib/fuctions';
 import { KitModel, ProductModel, ProductPriceRange } from '@models';
 import { Kit, Product } from '@utils/class';
@@ -87,7 +87,7 @@ export const calculateBreakEven = (stealFocus = true) => {
 
   kitBreakEvenRange.setValue('???');
 
-  ss.toast('As quantidades de break even estão sendo calculadas.', DialogTitle.InProgress);
+  GS.ss.toast('As quantidades de break even estão sendo calculadas.', DialogTitle.InProgress);
 
   for (let i = 0; i < nKits; i++) {
     const { kits, products, sponsorships } = fetchCurrentData();
@@ -97,7 +97,7 @@ export const calculateBreakEven = (stealFocus = true) => {
       continue;
     }
 
-    ss.toast(`Calculando quantidade de break even para o kit ${i + 1} ("${kits[i].name}").`, DialogTitle.InProgress);
+    GS.ss.toast(`Calculando quantidade de break even para o kit ${i + 1} ("${kits[i].name}").`, DialogTitle.InProgress);
 
     while (balance(kits, products, sponsorships) < 0) {
       kits[i].quantity += 1;
@@ -107,9 +107,9 @@ export const calculateBreakEven = (stealFocus = true) => {
   }
 
   if (stealFocus) {
-    ss.getRangeByName(NamedRange.DashboardBreakEven).activate();
-    ss.toast('Aqui estão quantas vendas faltam para o break even.', DialogTitle.Success);
+    GS.ss.getRangeByName(NamedRange.DashboardBreakEven).activate();
+    GS.ss.toast('Aqui estão quantas vendas faltam para o break even.', DialogTitle.Success);
   } else {
-    ss.toast('As quantidades de break even foram atualizadas.', DialogTitle.Success);
+    GS.ss.toast('As quantidades de break even foram atualizadas.', DialogTitle.Success);
   }
 };

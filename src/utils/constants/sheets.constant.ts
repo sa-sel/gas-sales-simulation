@@ -1,4 +1,4 @@
-import { ss } from '@lib/constants';
+import { GS } from '@lib/constants';
 
 export const enum SheetName {
   Controls = 'Controles',
@@ -12,14 +12,14 @@ export const enum SheetName {
 }
 
 export const sheets = {
-  controls: ss.getSheetByName(SheetName.Controls),
-  general: ss.getSheetByName(SheetName.General),
-  kits: ss.getSheetByName(SheetName.Kits),
-  newProducts: ss.getSheetByName(SheetName.NewProducts),
-  productKitMapping: ss.getSheetByName(SheetName.ProductKitMapping),
-  productPriceRanges: ss.getSheetByName(SheetName.ProductPriceRanges),
-  products: ss.getSheetByName(SheetName.Products),
-  sponsorships: ss.getSheetByName(SheetName.Sponsorships),
+  controls: GS.ss.getSheetByName(SheetName.Controls),
+  general: GS.ss.getSheetByName(SheetName.General),
+  kits: GS.ss.getSheetByName(SheetName.Kits),
+  newProducts: GS.ss.getSheetByName(SheetName.NewProducts),
+  productKitMapping: GS.ss.getSheetByName(SheetName.ProductKitMapping),
+  productPriceRanges: GS.ss.getSheetByName(SheetName.ProductPriceRanges),
+  products: GS.ss.getSheetByName(SheetName.Products),
+  sponsorships: GS.ss.getSheetByName(SheetName.Sponsorships),
 };
 
 /** Sheets that contain data for each member and must be kept synced. */
