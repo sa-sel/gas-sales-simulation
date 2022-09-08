@@ -1,5 +1,6 @@
 import { DialogTitle, GS } from '@lib/constants';
 import { getRangeBelow, readDataFromSheet } from '@lib/fuctions';
+import { Range } from '@lib/models';
 import { KitModel, ProductModel, ProductPriceRange } from '@models';
 import { Kit, Product } from '@utils/class';
 import { NamedRange, sheets } from '@utils/constants';
@@ -89,33 +90,42 @@ const fetchCurrentData = () => {
   return { kits, products, sponsorships };
 };
 
-export const calculateBreakEven = (stealFocus = true) => {
-  const kitBreakEvenRange = getRangeBelow(NamedRange.KitBreakEvenHeader);
-  const nKits = kitBreakEvenRange.getNumRows();
+export const refreshAccounting = (stealFocus = true) => {
+  const kitSalesGoalRange: Range = getRangeBelow(NamedRange.KitSalesGoalHeader);
+  const kitBreakEvenRange: Range = getRangeBelow(NamedRange.KitBreakEvenHeader);
+  const profitGoal: number = GS.ss.getRangeByName(NamedRange.ProfitGoal).getValue();
+  const nKits: number = kitBreakEvenRange.getNumRows();
 
   kitBreakEvenRange.setValue('???');
+  kitSalesGoalRange.setValue('???');
 
-  GS.ss.toast('As quantidades de break even estão sendo calculadas.', DialogTitle.InProgress);
+  GS.ss.toast('A simulação das finanças está sendo calculada.', DialogTitle.InProgress);
 
   for (let i = 0; i < nKits; i++) {
     const { kits, products, sponsorships } = fetchCurrentData();
+    const kitString = `${i + 1} ("${kits[i].name}")`;
 
     if (!kits[i].items.length || !kits[i].price) {
       kitBreakEvenRange.getCell(i + 1, 1).setValue('-');
+      kitSalesGoalRange.getCell(i + 1, 1).setValue('-');
       continue;
     }
 
-    GS.ss.toast(`Calculando quantidade de break even para o kit ${i + 1} ("${kits[i].name}").`, DialogTitle.InProgress);
-
+    GS.ss.toast(`Calculando simulação de break even para o kit ${kitString}.`, DialogTitle.InProgress);
     while (balance(kits, products, sponsorships) < 0) {
       kits[i].quantity += 1;
     }
-
     kitBreakEvenRange.getCell(i + 1, 1).setValue(kits[i].quantity);
+
+    GS.ss.toast(`Calculando simulação de meta de lucro para o kit ${kitString}.`, DialogTitle.InProgress);
+    while (balance(kits, products, sponsorships) < profitGoal) {
+      kits[i].quantity += 1;
+    }
+    kitSalesGoalRange.getCell(i + 1, 1).setValue(kits[i].quantity);
   }
 
   if (stealFocus) {
-    GS.ss.getRangeByName(NamedRange.DashboardBreakEven).activate();
+    GS.ss.getRangeByName(NamedRange.DashboardAccounting).activate();
     GS.ss.toast('Aqui estão quantas vendas faltam para o break even.', DialogTitle.Success);
   } else {
     GS.ss.toast('As quantidades de break even foram atualizadas.', DialogTitle.Success);
