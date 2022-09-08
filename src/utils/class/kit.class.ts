@@ -24,7 +24,7 @@ export class Kit {
   }
 
   addItem(product: Product, quantity?: number): Kit {
-    if (quantity) {
+    if (quantity && !isNaN(quantity)) {
       this._items.push({ product, quantity });
       product.sell(quantity * this.quantity);
     }

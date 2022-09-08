@@ -1,5 +1,5 @@
 import { DialogTitle, GS } from '@lib/constants';
-import { confirm, getRangeBelow } from '@lib/fuctions';
+import { confirm, getRangeBelow, safeDeleteRow } from '@lib/fuctions';
 import { NamedRange } from '@utils/constants';
 import { getSelectedProductsIds, manageSelectedProducts } from '@utils/functions';
 import { calculateBreakEven } from './break-even.feature';
@@ -16,7 +16,7 @@ export const deleteSelectedProducts = () => {
       },
       () => {
         GS.ss.toast('Excluindo os produtos.', DialogTitle.InProgress);
-        manageSelectedProducts(cell => cell.getSheet().deleteRow(cell.getRow()));
+        manageSelectedProducts(cell => safeDeleteRow(cell));
         GS.ss.toast('Produtos excluídos com sucesso.', DialogTitle.Success);
         calculateBreakEven();
       },

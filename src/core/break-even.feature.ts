@@ -11,8 +11,13 @@ const balance = (kits: Kit[], products: Product[], sponsorships: number): number
   return income + sponsorships - cost;
 };
 
+const rangeNotEmpty = (row: any[]) => row.every(row => row !== undefined && row !== null && row !== '');
+
 const fetchCurrentData = () => {
-  const sponsorships: number = readDataFromSheet(sheets.sponsorships, { map: row => row[1] }).reduce((acc, cur) => acc + cur, 0);
+  const sponsorships: number = readDataFromSheet(sheets.sponsorships, {
+    map: row => row[1],
+    filter: rangeNotEmpty,
+  }).reduce((acc, cur) => acc + cur, 0);
 
   const productsPriceRanges: Record<number, ProductPriceRange[]> = readDataFromSheet(sheets.productPriceRanges, {
     map: row => ({
@@ -20,6 +25,7 @@ const fetchCurrentData = () => {
       breakpoint: row[2],
       price: row[3],
     }),
+    filter: rangeNotEmpty,
   }).reduce((acc: Record<number, ProductPriceRange[]>, cur) => {
     if (!acc[cur.id]) {
       acc[cur.id] = [];
@@ -34,6 +40,7 @@ const fetchCurrentData = () => {
       id: row[0],
       qntPerKit: row.slice(2),
     }),
+    filter: row => row[0],
   }).reduce((acc, cur) => ({ ...acc, [cur.id]: cur.qntPerKit }), {});
 
   const kits: Kit[] = readDataFromSheet(sheets.kits, {
@@ -76,6 +83,7 @@ const fetchCurrentData = () => {
 
       return product;
     },
+    filter: row => row[0] && row[1] && !!productsPriceRanges[row[0]],
   });
 
   return { kits, products, sponsorships };

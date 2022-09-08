@@ -14,7 +14,7 @@ export const saveNewProducts = () => {
           }
           sheet.sort(2);
         });
-        sheets.products.getRange(1, 1).activate();
+        sheets.products.activate();
       },
     },
     invalidDataErrorMessage: `Há produtos com nome/empresa ausentes na planilha "${SheetName.NewProducts}".`,
