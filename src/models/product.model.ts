@@ -3,7 +3,7 @@ export type ProductModel = {
   name: string;
   manufacturer: string;
   minOrder: number;
-  qntIncrement: number;
+  batchSize: number;
   extraFees: number;
   shipping: number;
 };

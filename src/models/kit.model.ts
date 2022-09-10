@@ -12,7 +12,10 @@ export type KitModel = {
   income: number;
   breakEvenQnt: number;
 };
+
 export type KitItem = {
+  /** This item's product. */
   product: Product;
+  /** How many of this item's product there are on the kit. */
   quantity: number;
 };

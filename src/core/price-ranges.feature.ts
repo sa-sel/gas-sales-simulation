@@ -6,6 +6,11 @@ import { getSelectedProductsIds, unselectProducts } from '@utils/functions';
 const sortProductRangesSheet = () => sheets.productPriceRanges.sort(3).sort(2);
 
 const createPriceRanges = (productIds: string[]) => {
+  // unfortunately it's not possible to sort the sheets instantly only
+  // when the operation is over (just won't work), so this trigger will
+  // sort the sheet after about ~1.5 min
+  ScriptApp.newTrigger(sortProductRangesSheet.name).timeBased().after(1).create();
+
   GS.ss.toast('Criando as faixas de preço solicitadas.', DialogTitle.InProgress);
   appendDataToSheet(
     productIds.map(id => [id, undefined, '???', '???']),
@@ -13,7 +18,6 @@ const createPriceRanges = (productIds: string[]) => {
   );
 
   GS.ss.toast('Faixas de preço criadas. Lembre de preenchê-las.', DialogTitle.Success);
-  ScriptApp.newTrigger(sortProductRangesSheet.name).timeBased().after(1).create();
   sheets.productPriceRanges.activate();
 };
 

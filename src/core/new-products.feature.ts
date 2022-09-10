@@ -24,14 +24,7 @@ export const saveNewProducts = () => {
 
       switch (sheet.getSheetId()) {
         case sheets.newProducts.getSheetId(): {
-          row = row.concat([
-            product.name,
-            product.manufacturer,
-            product.minOrder,
-            product.qntIncrement,
-            product.extraFees,
-            product.shipping,
-          ]);
+          row = row.concat([product.name, product.manufacturer, product.minOrder, product.batchSize, product.extraFees, product.shipping]);
 
           break;
         }
@@ -41,7 +34,7 @@ export const saveNewProducts = () => {
             product.name,
             product.manufacturer,
             product.minOrder,
-            product.qntIncrement,
+            product.batchSize,
             undefined,
             product.extraFees,
             product.shipping,
@@ -76,7 +69,7 @@ export const saveNewProducts = () => {
       name: row[0],
       manufacturer: row[1],
       minOrder: row[2],
-      qntIncrement: row[3],
+      batchSize: row[3],
       extraFees: row[4],
       shipping: row[5],
     }),

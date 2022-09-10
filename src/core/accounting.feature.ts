@@ -5,6 +5,7 @@ import { KitModel, ProductModel, ProductPriceRange } from '@models';
 import { Kit, Product } from '@utils/class';
 import { NamedRange, sheets } from '@utils/constants';
 
+/** Calculate the balance considering the kits we sold, the products we bought to make them and the sponsorship we received. */
 const balance = (kits: Kit[], products: Product[], sponsorships: number): number => {
   const cost = products.reduce((acc, cur) => acc + cur.cost, 0);
   const income = kits.reduce((acc, cur) => acc + cur.income, 0);
@@ -70,7 +71,7 @@ const fetchCurrentData = () => {
         name: row[1],
         manufacturer: row[2],
         minOrder: row[3] || 1,
-        qntIncrement: row[4] || 1,
+        batchSize: row[4] || 1,
         extraFees: row[6] || 0,
         shipping: row[7] || 0,
       };
@@ -78,7 +79,7 @@ const fetchCurrentData = () => {
         .setFees(data.extraFees)
         .setMinOrder(data.minOrder)
         .setShipping(data.shipping)
-        .setQntIncrement(data.qntIncrement);
+        .setBatchSize(data.batchSize);
 
       productsQntPerKit[product.id].forEach((qnt: number, i: number) => kits[i].addItem(product, qnt));
 
@@ -105,6 +106,7 @@ export const refreshAccounting = (stealFocus = true) => {
     const { kits, products, sponsorships } = fetchCurrentData();
     const kitString = `${i + 1} ("${kits[i].name}")`;
 
+    // if the current kits is not in use
     if (!kits[i].items.length || !kits[i].price) {
       kitBreakEvenRange.getCell(i + 1, 1).setValue('-');
       kitSalesGoalRange.getCell(i + 1, 1).setValue('-');
