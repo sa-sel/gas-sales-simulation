@@ -2,6 +2,7 @@ import { GS } from '@lib';
 import { unselectProducts } from '@utils/functions';
 import { refreshAccounting } from './accounting.feature';
 import { createKit } from './create-kit.feature';
+import { deleteKit } from './delete-kit.feature';
 import { deleteSelectedProducts } from './delete-products.feature';
 import { saveNewProducts } from './new-products.feature';
 import { createInputProductPriceRanges, createSelectedProductsPriceRanges } from './price-ranges.feature';
@@ -17,7 +18,7 @@ export const onOpen = () => {
     .addItem('Adicionar faixas de preço dos produtos selecionados', createSelectedProductsPriceRanges.name)
     .addToUi();
 
-  GS.ssui.createMenu('[Kits]').addItem('Criar novo kit', createKit.name).addToUi();
+  GS.ssui.createMenu('[Kits]').addItem('Criar novo kit', createKit.name).addItem('Excluir kit', deleteKit.name).addToUi();
 
   GS.ssui.createMenu('[Simulação]').addItem('Simular break even e meta de lucro', refreshAccounting.name).addToUi();
 };

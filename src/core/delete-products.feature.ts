@@ -15,7 +15,7 @@ export const deleteSelectedProducts = () => {
       },
       () => {
         GS.ss.toast('Excluindo os produtos.', DialogTitle.InProgress);
-        manageSelectedProducts(cell => safeDeleteRow(cell));
+        manageSelectedProducts(cell => safeDeleteRow(cell.getSheet(), cell.getRow()));
         GS.ss.toast('Produtos excluídos com sucesso.', DialogTitle.Success);
         refreshAccounting();
       },
