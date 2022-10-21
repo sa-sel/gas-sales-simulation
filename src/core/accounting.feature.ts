@@ -1,6 +1,4 @@
-import { DialogTitle, GS } from '@lib/constants';
-import { getRangeBelow, readDataFromSheet } from '@lib/fuctions';
-import { Range } from '@lib/models';
+import { DialogTitle, fetchData, getRangeBelow, GS, Range } from '@lib';
 import { KitModel, ProductModel, ProductPriceRange } from '@models';
 import { Kit, Product } from '@utils/class';
 import { NamedRange, sheets } from '@utils/constants';
@@ -16,12 +14,12 @@ const balance = (kits: Kit[], products: Product[], sponsorships: number): number
 const rangeNotEmpty = (row: any[]) => row.every(row => row !== undefined && row !== null && row !== '');
 
 const fetchCurrentData = () => {
-  const sponsorships: number = readDataFromSheet(sheets.sponsorships, {
+  const sponsorships: number = fetchData(sheets.sponsorships, {
     map: row => row[1],
     filter: rangeNotEmpty,
   }).reduce((acc, cur) => acc + cur, 0);
 
-  const productsPriceRanges: Record<number, ProductPriceRange[]> = readDataFromSheet(sheets.productPriceRanges, {
+  const productsPriceRanges: Record<number, ProductPriceRange[]> = fetchData(sheets.productPriceRanges, {
     map: row => ({
       id: row[0],
       breakpoint: row[2],
@@ -37,7 +35,7 @@ const fetchCurrentData = () => {
     return acc;
   }, {});
 
-  const productsQntPerKit: Record<number, number[]> = readDataFromSheet(sheets.productKitMapping, {
+  const productsQntPerKit: Record<number, number[]> = fetchData(sheets.productKitMapping, {
     map: row => ({
       id: row[0],
       qntPerKit: row.slice(2),
@@ -45,7 +43,7 @@ const fetchCurrentData = () => {
     filter: row => row[0],
   }).reduce((acc, cur) => ({ ...acc, [cur.id]: cur.qntPerKit }), {});
 
-  const kits: Kit[] = readDataFromSheet(sheets.kits, {
+  const kits: Kit[] = fetchData(sheets.kits, {
     map: row => {
       const data: KitModel = {
         no: row[0],
@@ -64,7 +62,7 @@ const fetchCurrentData = () => {
     },
   });
 
-  const products: Product[] = readDataFromSheet(sheets.products, {
+  const products: Product[] = fetchData(sheets.products, {
     map: row => {
       const data: ProductModel = {
         id: row[0],

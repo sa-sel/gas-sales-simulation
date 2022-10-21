@@ -1,5 +1,4 @@
-import { DialogTitle, GS } from '@lib/constants';
-import { confirm, getRangeBelow, safeDeleteRow } from '@lib/fuctions';
+import { confirm, DialogTitle, getRangeBelow, GS, safeDeleteRow } from '@lib';
 import { NamedRange } from '@utils/constants';
 import { getSelectedProductsIds, manageSelectedProducts } from '@utils/functions';
 import { refreshAccounting } from './accounting.feature';

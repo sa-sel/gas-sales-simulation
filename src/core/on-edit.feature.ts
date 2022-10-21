@@ -1,6 +1,4 @@
-import { GS } from '@lib/constants';
-import { rangesOverlap } from '@lib/fuctions';
-import { SheetsOnEditEvent } from '@lib/models';
+import { GS, rangesOverlap, SheetsOnEditEvent } from '@lib';
 import { NamedRange, watchedRanges } from '@utils/constants';
 import { refreshAccounting } from './accounting.feature';
 

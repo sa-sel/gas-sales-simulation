@@ -1,4 +1,4 @@
-import { getRangeBelow, isSheetOneOf, saveNewData } from '@lib/fuctions';
+import { getRangeBelow, isSheetOneOf, saveNewData } from '@lib';
 import { ProductModel } from '@models';
 import { NamedRange, SheetName, sheets, syncedDataSheets } from '@utils/constants';
 

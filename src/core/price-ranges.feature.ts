@@ -1,5 +1,4 @@
-import { DialogTitle, GS } from '@lib/constants';
-import { appendDataToSheet, getRangeBelow, input } from '@lib/fuctions';
+import { appendDataToSheet, DialogTitle, getRangeBelow, GS, input } from '@lib';
 import { NamedRange, sheets } from '@utils/constants';
 import { getSelectedProductsIds, unselectProducts } from '@utils/functions';
 
