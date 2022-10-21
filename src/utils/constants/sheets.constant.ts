@@ -2,7 +2,7 @@ import { GS } from '@lib';
 
 export const enum SheetName {
   Controls = 'Controles',
-  General = 'Geral',
+  Dashboard = 'Geral',
   Kits = 'Kits',
   NewProducts = 'Novos Produtos',
   ProductKitMapping = 'Mapeamento Produto-Kit',
@@ -13,7 +13,7 @@ export const enum SheetName {
 
 export const sheets = {
   controls: GS.ss.getSheetByName(SheetName.Controls),
-  general: GS.ss.getSheetByName(SheetName.General),
+  dashboard: GS.ss.getSheetByName(SheetName.Dashboard),
   kits: GS.ss.getSheetByName(SheetName.Kits),
   newProducts: GS.ss.getSheetByName(SheetName.NewProducts),
   productKitMapping: GS.ss.getSheetByName(SheetName.ProductKitMapping),
