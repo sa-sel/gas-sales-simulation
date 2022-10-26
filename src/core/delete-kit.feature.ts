@@ -25,7 +25,11 @@ export const deleteKit = () => {
   safeDeleteRow(sheets.kits, sheets.kits.getFrozenRows() + +kitNumber);
 
   // delete kit row in accounting panel in dashboard sheet
-  sheets.dashboard.deleteRow(GS.ss.getRangeByName(NamedRange.DashboardAccounting).getRow() + 4);
+  const dashboardAccountingRange = GS.ss.getRangeByName(NamedRange.DashboardAccounting);
+
+  if (dashboardAccountingRange.getNumRows() > 4) {
+    sheets.dashboard.deleteRow(dashboardAccountingRange.getRow() + 3);
+  }
 
   GS.ss.toast(`Exclusão de kit concluída: "${kitNumber}".`, DialogTitle.Success);
   sheets.kits.activate();

@@ -14,18 +14,35 @@ export const createKit = () => {
   const newKitRow = appendDataToSheet([[undefined, kitName, 0, 0]], sheets.kits);
 
   // add new kit column to product-kit map sheet
-  addColsToSheet(sheets.productKitMapping, [
+  addColsToSheet(
     [
-      undefined,
-      ...getRangeBelow(NamedRange.ProductsIdsHeader)
-        .getValues()
-        .flat()
-        .map(() => 0),
+      [
+        undefined,
+        ...getRangeBelow(NamedRange.ProductsIdsHeader)
+          .getValues()
+          .flat()
+          .map(() => 0),
+      ],
     ],
-  ]);
+    sheets.productKitMapping,
+  );
 
   // add new kit row to accounting panel in dashboard sheet
-  sheets.dashboard.insertRows(GS.ss.getRangeByName(NamedRange.DashboardAccounting).getRow() + 4);
+  const dashboardAccountingRange = GS.ss.getRangeByName(NamedRange.DashboardAccounting);
+  const targetRow = dashboardAccountingRange.getRow() + 3;
+  const nKits = getRangeBelow(NamedRange.KitBreakEvenHeader).getNumRows();
+
+  if (dashboardAccountingRange.getNumRows() - nKits < 3) {
+    sheets.dashboard.insertRows(targetRow);
+
+    // restore style
+    sheets.dashboard
+      .getRange(targetRow + 1, 1, 1, sheets.dashboard.getMaxColumns())
+      .copyFormatToRange(sheets.dashboard, 1, sheets.dashboard.getMaxColumns(), targetRow, targetRow);
+    sheets.dashboard
+      .getRange(targetRow, dashboardAccountingRange.getColumn(), 1, dashboardAccountingRange.getNumColumns())
+      .setBorder(null, null, true, null, null, true, 'black', SpreadsheetApp.BorderStyle.SOLID);
+  }
 
   GS.ss.toast(`Criação de kit concluída: "${kitName}".`, DialogTitle.Success);
   newKitRow.activate();
