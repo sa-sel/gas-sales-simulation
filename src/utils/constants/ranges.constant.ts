@@ -2,6 +2,7 @@
 export const enum NamedRange {
   ControlAccounting = 'ControlAccounting',
   DashboardAccounting = 'DashboardAccounting',
+  HelpVideoUrl = 'HelpVideo',
   ItemsPerKit = 'ItemsPerKit',
   KitBreakEvenHeader = 'KitBreakEvenHeader',
   KitData = 'KitData',
